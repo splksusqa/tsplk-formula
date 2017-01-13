@@ -49,6 +49,8 @@ class TestTsplk(object):
         data = yaml.load(out)
         assert data['auto_accept'] is True
 
-    def test_restart_saltmaster(self, Docker):
-        Docker.provision_state('tsplk')
+
+class TestIntegration(object):
+    def test_integration_master(self, Docker):
+        Docker.provision_as('tsplk-saltmaster')
 

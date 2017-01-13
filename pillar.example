@@ -1,5 +1,6 @@
 tsplk:
   salty-splunk:
-    version:
+    version: master
+    key-path: /tmp/salty-splunk-key
   tsplk-infra:
-    version:
+    version: master
