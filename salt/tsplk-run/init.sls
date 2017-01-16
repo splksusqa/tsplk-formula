@@ -17,10 +17,10 @@ sync-all-states-files:
 
 
 # sync data from s3
-#tf-variables:
-#  file.managed:
-#    - name: /tmp/tf-vars.json
-#    - source: salt://{{ user }}/{{ project }}/tf.vars.json
+tf-variables:
+  file.managed:
+    - name: /tmp/id_rsa
+    - source: salt://{{ user }}/{{ project }}/id_rsa
 #
 ### store credential for tf backend
 #aws-credintial:
