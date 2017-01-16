@@ -1,6 +1,7 @@
 auto_accept: True
 file_roots:
   base:
+    - /srv/tsplk-formula/salt
     - /srv/salty-splunk/file_base
     - /srv/salty-splunk/formulas/nfs
 
