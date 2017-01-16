@@ -20,7 +20,8 @@ fileserver_backend:
   - s3fs
 
 s3.buckets:
-  - tsplk-bucket
+  base:
+    - tsplk-bucket
 
 #ext_pillar:
 #  - s3:
