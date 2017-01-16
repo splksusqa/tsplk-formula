@@ -2,7 +2,7 @@ include:
   - git
 
 # sync tf file
-tsplk-infra:
+tsplk-formula:
   git.latest:
     - name: https://github.com/splksusqa/tsplk-formula
     - target: /srv/tsplk-formula
