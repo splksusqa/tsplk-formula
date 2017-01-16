@@ -16,3 +16,12 @@ peer_run:
 timeout: 60
 fileserver_backend:
   - roots
+  - s3fs
+
+s3.buckets:
+  - tsplk-bucket
+
+ext_pillar:
+  - s3:
+    bucket: tsplk-bucket
+    prefix: {{ user }}/{{ project }}/pillar

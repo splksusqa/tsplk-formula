@@ -1,6 +1,10 @@
 tsplk:
+  user: tu
+  project: tp
   salty-splunk:
     version: master
     key-path: /tmp/salty-splunk-key
   tsplk-infra:
+    version: master
+  tsplk-formula:
     version: master

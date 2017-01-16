@@ -17,37 +17,52 @@ def test_terraform(Docker):
     assert Cmd.run_test('terraform version')
 
 
-class TestTsplk(object):
-    @pytest.mark.parametrize(
-        'pillar',
-        [
-            None,
-            {'tsplk': {'salty-splunk': {'version': '0.4'}}}
-        ]
-    )
-    def test_salty_splunk(self, Docker, pillar):
-        Docker.provision_state('salty-splunk', pillar_data=pillar)
-        f_class = Docker.get_module("File")
-        f = f_class('/srv/salty-splunk/README.md')
-        Cmd = Docker.get_module("Command")
-        if pillar:
-            out = Cmd.check_output(
-                'cd /srv/salty-splunk && git describe --tags')
-            assert pillar['salty-splunk']['version'] in out
-        assert f.exists
+class TestTsplkMasterConfig(object):
+    def test_master_config(self, Docker):
+        Docker.provision_state('tsplk-master-config', pillar_data=
+            {'tsplk': {'user': 'testuser', 'project': 'testproject'}})
+        cmd = Docker.get_module("Command")
+        out = cmd.check_output(
+                    'cat /etc/salt/master')
+        print(out)
+        assert 'testuser/testproject/pillar' in out
+        # assert pillar['salty-splunk']['version'] in out
 
-    def test_tsplk_infra(self, Docker):
-        Docker.provision_state('tsplk', 'tsplk-infra')
-        f_class = Docker.get_module("File")
-        f = f_class('/srv/tsplk-infra/splunk.tf')
-        assert f.exists
+class TestTsplkRun(object):
+    def test_tt(self, Docker):
+        Docker.provision_state('tsplk-run')
 
-    def test_tsplk_master_conf(self, Docker):
-        Docker.provision_state('tsplk', 'salt-master-conf')
-        Cmd = Docker.get_module("Command")
-        out = Cmd.check_output('cat /etc/salt/master')
-        data = yaml.load(out)
-        assert data['auto_accept'] is True
+
+    # @pytest.mark.parametrize(
+    #     'pillar',
+    #     [
+    #         None,
+    #         {'tsplk': {'salty-splunk': {'version': '0.4'}}}
+    #     ]
+    # )
+    # def test_salty_splunk(self, Docker, pillar):
+    #     Docker.provision_state('salty-splunk', pillar_data=pillar)
+    #     f_class = Docker.get_module("File")
+    #     f = f_class('/srv/salty-splunk/README.md')
+    #     Cmd = Docker.get_module("Command")
+    #     if pillar:
+    #         out = Cmd.check_output(
+    #             'cd /srv/salty-splunk && git describe --tags')
+    #         assert pillar['salty-splunk']['version'] in out
+    #     assert f.exists
+    #
+    # def test_tsplk_infra(self, Docker):
+    #     Docker.provision_state('tsplk', 'tsplk-infra')
+    #     f_class = Docker.get_module("File")
+    #     f = f_class('/srv/tsplk-infra/splunk.tf')
+    #     assert f.exists
+    #
+    # def test_tsplk_master_conf(self, Docker):
+    #     Docker.provision_state('tsplk', 'salt-master-conf')
+    #     Cmd = Docker.get_module("Command")
+    #     out = Cmd.check_output('cat /etc/salt/master')
+    #     data = yaml.load(out)
+    #     assert data['auto_accept'] is True
 
 
 class TestIntegration(object):
