@@ -22,7 +22,7 @@ fileserver_backend:
 s3.buckets:
   - tsplk-bucket
 
-ext_pillar:
-  - s3:
-    bucket: tsplk-bucket
-    prefix: {{ user }}/{{ project }}/pillar
+#ext_pillar:
+#  - s3:
+#    bucket: tsplk-bucket
+#    prefix: {{ user }}/{{ project }}/pillar
