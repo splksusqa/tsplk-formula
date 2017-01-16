@@ -16,7 +16,6 @@ base:
 # config s3 pillar data, spin up minions,
 # called by master and minion itself
   'tsplk-master-run':
-    - tsplk-formula
     - tsplk-infra
     - salty-splunk
     - tsplk-run
