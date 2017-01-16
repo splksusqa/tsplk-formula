@@ -20,7 +20,7 @@ sync-all-states-files:
 tf-variables:
   file.managed:
     - name: /tmp/id_rsa
-    - source: salt://{{ user }}/{{ project }}/id_rsa
+    - source: salt://base/{{ user }}/{{ project }}/id_rsa
 #
 ### store credential for tf backend
 #aws-credintial:
