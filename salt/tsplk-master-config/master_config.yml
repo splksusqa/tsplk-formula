@@ -7,7 +7,7 @@ file_roots:
 
 pillar_roots:
   base:
-    - /srv/salt/pillar
+    - /srv/pillar
 runner_dirs:
   - /srv/salty-splunk/file_base/runners
 peer_run:
@@ -23,7 +23,7 @@ s3.buckets:
   base:
     - tsplk-bucket
 
-#ext_pillar:
-#  - s3:
-#    bucket: tsplk-bucket
-#    prefix: {{ user }}/{{ project }}/pillar
+ext_pillar:
+  - s3:
+    bucket: tsplk-bucket
+    prefix: base/{{ user }}/{{ project }}/pillar

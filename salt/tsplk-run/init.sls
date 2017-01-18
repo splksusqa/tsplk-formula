@@ -15,17 +15,25 @@ sync-all-states-files:
     - name: saltutil.sync_all
     - tgt: '*'
 
+# sync pillar data
+#pillar-data:
+#  file.managed:
+#    # this is defined in master config
+#    - name: /srv/pillar
+#    # base path is needed for s3fs backend
+#    - source: salt://base/{{ user }}/{{ project }}/pillar
 
-# sync data from s3
-tf-variables:
-  file.managed:
-    - name: /tmp/id_rsa
-    - source: salt://base/{{ user }}/{{ project }}/id_rsa
-#
-### store credential for tf backend
-#aws-credintial:
-#  cmd.run:
-#
+# sync terraform variables
+
+## store credential for tf backend if it's on AWS and backend is S3
+aws-credintial:
+  pkg.installed:
+    - name: jq
+  cmd.run:
+#    todo hard code tsplk here
+    - name: curl http://169.254.169.254/latest/meta-data/iam/security-credentials/tsplk | jq .'AccessKeyId' >> /tmp/test
+    - require: aws-credintial.pkg
+
 ### spin up vm
 #terraform-apply:
 #  cmd.run:
