@@ -18,14 +18,14 @@ pillar-data:
     # this is defined in master config
     - name: /srv/data
     # base path is needed for s3fs backend
-    - source: salt://base/{{ project }}/data
+    - source: s3://tsplk-bucket/{{ user }}-{{ project }}
 
 ### spin up vm
 terraform-apply:
   cmd.run:
     - name: |
         terraform remote config -backend=s3 -backend-config="bucket=tsplk-bucket" \
-        -backend-config="key=base/{{ user }}/{{ project }}/terraform.tfstate" \
+        -backend-config="key={{ user }}/{{ project }}/terraform.tfstate" \
         -backend-config="region=us-west-2"
     - cwd: /srv
 

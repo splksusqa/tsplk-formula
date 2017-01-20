@@ -21,9 +21,10 @@ fileserver_backend:
   - roots
   - s3fs
 
-s3.buckets:
-  base:
-    - tsplk-{{ user }}
+# not useful now since it will sync all files in the bucket
+#s3.buckets:
+#  base:
+#    - tsplk-{{ user }}
 
 # not working right now,
 # see https://github.com/saltstack/salt/issues/31664
