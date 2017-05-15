@@ -20,19 +20,10 @@ pillar-data:
     # base path is needed for s3fs backend
     - source: s3://tsplk-bucket/{{ user }}-{{ project }}
 
-### spin up vm
 terraform-apply:
   cmd.run:
-    - name: |
-        terraform remote config -backend=s3 -backend-config="bucket=tsplk-bucket" \
-        -backend-config="key={{ user }}/{{ project }}/terraform.tfstate" \
-        -backend-config="region=us-west-2"
+    - name: terraform apply -var-file=data/salt_minion_var.json /tsplk-infra/tf/salt_minion
     - cwd: /srv
-
-#terraform-apply:
-#  cmd.run:
-#    - name: terraform apply -var-file=data/salt_minion_var.json /tsplk-infra/tf/salt_minion
-#    - cwd: /srv
 
 ### run runner grains assign
 ##salt.runner:

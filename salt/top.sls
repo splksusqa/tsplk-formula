@@ -8,6 +8,7 @@ base:
     - tsplk-infra
     - terraform
     - salty-splunk
+    - debugging-splunk
 
 #  called by user_data/shell script
   'tsplk-master-bootstrap':
