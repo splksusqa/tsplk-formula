@@ -2,19 +2,10 @@ import pytest
 import testinfra
 import json
 
-target_boxes = ['ubuntu15-salt']
+target_boxes = ['ubuntu-salt']
 # get check_output from local host
 check_output = testinfra.get_host("local://").check_output
 
-# # Override the host fixture
-# @pytest.fixture
-# def host(request):
-#     docker_id = check_output(
-#         "docker run -d %s tail -f /dev/null", request.param)
-#     # yield a dynamic created host
-#     yield testinfra.get_host("docker://" + docker_id)
-#     # destroy the container
-#     check_output("docker rm -f %s", docker_id)
 
 @pytest.fixture(scope='function', params=target_boxes)
 def image_name(request):
@@ -93,16 +84,6 @@ def Docker(request, docker_image):
 
     return docker
 
-
-
-
-
-
-
-# get_backend_class('docker').provision_as = \
-#     docker_backend_provision_as
-# testinfra.backend.get_backend_class('docker').provision_state = \
-#     docker_backend_provision_state
 
 @pytest.fixture
 def Slow():

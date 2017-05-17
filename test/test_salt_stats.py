@@ -27,10 +27,10 @@ import pytest
     #                 'cat /etc/salt/master')
     #     print(out)
     #     assert 'testuser/testproject/pillar' in out
-        # assert pillar['salty-splunk']['version'] in out
+    # assert pillar['salty-splunk']['version'] in out
 
 class TestTsplkRun(object):
-    def test_tt(self, Docker):
+    def test_debugging_splunk(self, Docker):
         result = Docker.run('echo test')
         print(result.stdout)
         result = Docker.run('ls /srv/salt')
