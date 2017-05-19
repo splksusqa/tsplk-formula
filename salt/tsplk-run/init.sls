@@ -1,6 +1,5 @@
 # this is called by salt-call state.highstate not local
 include:
-  - debugging-splunk
   - salty-splunk
   - tsplk-infra
   - terraform
