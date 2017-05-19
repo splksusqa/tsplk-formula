@@ -10,7 +10,7 @@ include:
 {% set bucket_name = salt['pillar.get']('tsplk:bucket-name', 'tp') %}
 
 # init terraform
-terraform-apply:
+terraform-init:
   cmd.run:
     - name: terraform init --backend-config=key={{ user }}-{{ project }} --backend-config=bucket={{ bucket_name }}
     - cwd: /srv/tsplk-infra
