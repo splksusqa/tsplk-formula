@@ -1,6 +1,16 @@
+import os
+
 import pytest
 import testinfra
 import json
+import logging
+import types
+
+log_file_handler = logging.FileHandler('test.log')
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+log.addHandler(log_file_handler)
+
 
 target_boxes = ['ubuntu-salt']
 # get check_output from local host
@@ -31,7 +41,7 @@ def docker_backend_provision_as(self, minion_id):
     """
     # Command = self.run("Command")
     print('Executing salt-call locally for id', minion_id)
-    salt_call_cmd = "salt-call --local --force-color " \
+    salt_call_cmd = "salt-call --local --no-color " \
                     "--retcode-passthrough " \
                     "--id={0} state.highstate".format(minion_id)
     cmd = self.run(salt_call_cmd)
@@ -44,12 +54,12 @@ def docker_backend_provision_state(self, state, id=None, pillar_data=None):
     cmd_str = 'state.sls_id' if id else 'state.apply'
     id_str = id if id else ''
     pillar_data = "pillar='{0}'".format(json.dumps(pillar_data)) if pillar_data else ''
-    salt_call_cmd = "salt-call --local --force-color " \
+    salt_call_cmd = "salt-call --local --no-color -l debug " \
                     "--retcode-passthrough " \
                     "{0} {1} {2} {3}".format(cmd_str, id_str, state, pillar_data)
-    print(salt_call_cmd)
+    log.debug(salt_call_cmd)
     cmd = self.run(salt_call_cmd)
-    print(cmd.stdout)
+    log.debug(cmd.stdout)
     assert cmd.rc == 0, cmd.stderr
     return cmd
     
@@ -63,12 +73,16 @@ def Docker(request, docker_image):
     root_dir = dirname(dirname(__file__))
 
     formula_folder = '/srv/salt'
-    print 'Project root dir is:', root_dir
+    log.debug('Project root dir is: %s' % root_dir)
+    aws_folder = os.path.expanduser('~/.aws')
+    aws_str = ''
+    if os.path.exists(aws_folder):
+        aws_str = '-v %s:/root/.aws' % aws_folder
 
     # Run a new container. Run in privileged mode, so systemd will start
     cmd_str = "docker run --privileged -d -l debug " \
-              "-v {rd}/salt:{f} " \
-              "{di}".format(rd=root_dir, di=docker_image, f=formula_folder)
+              "-v {rd}/salt:{f} {a} " \
+              "{di}".format(rd=root_dir, di=docker_image, f=formula_folder, a=aws_str)
     docker_id = check_output(cmd_str)
 
     def teardown():
@@ -78,7 +92,9 @@ def Docker(request, docker_image):
     # At the end of each test, we destroy the container
     request.addfinalizer(teardown)
     docker = testinfra.get_host("docker://" + docker_id)
-    import types
+    ret = docker.run('salt --versions-report')
+    log.debug(ret.stdout)
+
     docker.provision_as = types.MethodType(docker_backend_provision_as, docker)
     docker.provision_state = types.MethodType(docker_backend_provision_state, docker)
 

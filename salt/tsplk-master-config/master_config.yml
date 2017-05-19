@@ -4,6 +4,7 @@ file_roots:
     - /srv/tsplk-formula/salt
     - /srv/salty-splunk/file_base
     - /srv/salty-splunk/formulas/nfs
+    - /srv/tsplk-formula/reactor
 
 pillar_roots:
   base:
@@ -19,7 +20,14 @@ peer_run:
 timeout: 60
 fileserver_backend:
   - roots
-  - s3fs
+
+# for s3 sync data able to work, need to provide the region
+# refer to https://github.com/saltstack/salt/issues/28913
+s3.location: us-west-2
+#reactor:                            # Master config section "reactor"
+#  - 'salt/minion/*/start':          # Match tag "salt/minion/*/start"
+#    - salt://reactor/minion-start.sls        # Things to do when a minion starts
+##    - /srv/reactor/monitor.sls      # Other things to do
 
 # not useful now since it will sync all files in the bucket
 #s3.buckets:

@@ -10,3 +10,5 @@ tsplk-infra:
     - force_clone: True
     - require:
       - sls: git
+
+# init

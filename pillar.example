@@ -8,3 +8,6 @@ tsplk:
     version: master
   tsplk-formula:
     version: master
+  terraform:
+    version: 0.8.2
+    hash: xx

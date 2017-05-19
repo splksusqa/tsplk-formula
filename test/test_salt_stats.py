@@ -30,12 +30,59 @@ import pytest
     # assert pillar['salty-splunk']['version'] in out
 
 class TestTsplkRun(object):
+    @pytest.mark.skip
     def test_debugging_splunk(self, Docker):
         result = Docker.run('echo test')
         print(result.stdout)
         result = Docker.run('ls /srv/salt')
         print(result.stdout)
         Docker.provision_state('debugging-splunk')
+
+
+    def test_tsplk_pillar_data(self, Docker):
+        Docker.provision_state('tsplk-pillar-data', pillar_data={'tsplk': {'user': 'testuser', 'project': 'testproject',
+                                                                   'bucket-name': 'tsplk-bucket'}})
+        result = Docker.run('ls /srv/pillar')
+        assert 'testdata' in result.stdout
+        result = Docker.run('ls /srv/pillar/testfolder')
+        assert 'testdata' in result.stdout
+
+
+    def test_master_config(self, Docker):
+        Docker.provision_state('tsplk-master-config', pillar_data={'tsplk': {'bucket-name': 'tsplk-bucket'}})
+        # result = Docker.check_output(
+        #     'salt-call -l debug --master=localhost test.version')
+        result = Docker.run('salt-run fileserver.file_list backend=s3fs')
+        print(result.stdout)
+        print(result.stderr)
+        result = Docker.run('ls /srv')
+        print(result)
+
+
+    @pytest.mark.skip
+    def test_tsplk_terraform(self, Docker):
+        tf_hash = 'd127b4f981b1c8cba8ceb90fc6ab0788'
+        tf_version = '0.9.5'
+        Docker.provision_state('terraform', pillar_data={'terraform': {
+                                                             'version': tf_version,
+                                                             'hash': tf_hash
+                                                         }})
+        cmd = Docker.run('terraform version')
+        print(cmd.stdout)
+        assert tf_version in cmd.stdout
+
+    @pytest.mark.skip
+    def test_tsplk_run(self, Docker):
+        tf_hash = 'd127b4f981b1c8cba8ceb90fc6ab0788'
+        tf_version = '0.9.5'
+        Docker.provision_state('tsplk-run', pillar_data={'tsplk': {'user': 'u', 'project': 'p',
+                                                                   'id_list': ['1', '2']
+                                                                   },
+                                                         'terraform': {
+                                                             'version': tf_version,
+                                                             'hash': tf_hash
+                                                         }
+                                                         })
 
 
     # @pytest.mark.parametrize(
