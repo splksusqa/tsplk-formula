@@ -71,8 +71,11 @@ class TestTsplkRun(object):
         print(cmd.stdout)
         assert tf_version in cmd.stdout
 
-    @pytest.mark.skip
+
     def test_tsplk_run(self, Docker):
+        result = Docker.check_output('salt-call --local --retcode-passthrough state.show_sls tsplk-run')
+        print(result)
+
         tf_hash = 'd127b4f981b1c8cba8ceb90fc6ab0788'
         tf_version = '0.9.5'
         Docker.provision_state('tsplk-run', pillar_data={'tsplk': {'user': 'u', 'project': 'p',

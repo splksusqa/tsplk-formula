@@ -8,6 +8,8 @@ include:
 {% set user = salt['pillar.get']('tsplk:user', 'tu') %}
 {% set project = salt['pillar.get']('tsplk:project', 'tp') %}
 {% set bucket_name = salt['pillar.get']('tsplk:bucket-name', 'tp') %}
+{% set hipchat_room_id = salt['pillar.get']('hipchat_room_id', '') %}
+{% set hipchat_room_token = salt['pillar.get']('hipchat_room_token', '') %}
 
 # init terraform
 terraform-init:
@@ -42,11 +44,13 @@ wait_for_start:
 
 hipchat-message:
   hipchat.send_message:
-    - room_id: {% salt['pillar.get']('hipchat_room_id', '') %}
+    - room_id: {{ hipchat_room_id }}
     - message: 'This state was executed successfully.'
     - api_url: https://hipchat.splunk.com
-    - api_key: {% salt['pillar.get']('hipchat_room_token', '') %}
+    - api_key: {{ hipchat_room_token }}
     - api_version: v2
+    - require:
+      - salt: wait_for_start
 
 
 # wait for all
