@@ -11,6 +11,7 @@ install-and-start:
     - name: >
         tar xf splunk-6.6.0-1c4f3bbe1aea-Linux-x86_64.tgz &&
         ./splunk/bin/splunk start --accept-license --answer-yes &&
+        ./splunk/bin/splunk enable boot-start -auth admin:changeme &&
         ./splunk/bin/splunk add monitor /var/log -auth admin:changeme
     - cwd: /opt
     - require:
