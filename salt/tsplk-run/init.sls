@@ -26,6 +26,7 @@ terraform-apply:
     - require:
       - file: pillar-data
       - sls: terraform
+      - cmd: terraform-init
 
 wait_for_start:
   salt.wait_for_event:
@@ -35,15 +36,17 @@ wait_for_start:
 {% for id_name in salt['pillar.get']('tsplk:id_list', []) %}
       - {{ id_name }}
 {% endfor %}
+    - require:
+      - cmd: terraform-apply
+      - cmd: terraform-init
 
-#hipchat-message:
-#  hipchat.send_message:
-#    - room_id: 123456
-#    - from_name: SuperAdmin
-#    - message: 'This state was executed successfully.'
-#    - api_url: https://hipchat.myteam.com
-#    - api_key: peWcBiMOS9HrZG15peWcBiMOS9HrZG15
-#    - api_version: v1
+hipchat-message:
+  hipchat.send_message:
+    - room_id: {% salt['pillar.get']('hipchat_room_id', '') %}
+    - message: 'This state was executed successfully.'
+    - api_url: https://hipchat.splunk.com
+    - api_key: {% salt['pillar.get']('hipchat_room_token', '') %}
+    - api_version: v2
 
 
 # wait for all
