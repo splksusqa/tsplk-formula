@@ -1,3 +1,6 @@
+include:
+  - tsplk-pillar-data
+
 # Make sure this state only executed by salt-call
 # use template here
 salt-master-conf:
@@ -27,3 +30,4 @@ restart-salt-master:
     - enable: True
     - watch:
       - file: salt-master-conf
+      - sls: tsplk-pillar-data
