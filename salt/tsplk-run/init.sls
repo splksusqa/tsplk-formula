@@ -13,7 +13,7 @@ include:
 terraform-init:
   cmd.run:
     - name: terraform init --backend-config=key={{ user }}-{{ project }} --backend-config=bucket={{ bucket_name }}
-    - cwd: /srv/tsplk-infra
+    - cwd: /srv/tsplk-infra/tf
     - require:
       - sls: tsplk-infra
 
@@ -21,7 +21,7 @@ terraform-init:
 terraform-apply:
   cmd.run:
     - name: terraform apply -var-file=/srv/pillar/tf_vars.json -target=module.minion
-    - cwd: /srv/tsplk-infra
+    - cwd: /srv/tsplk-infra/tf
     - require:
       - cmd: terraform-init
 
