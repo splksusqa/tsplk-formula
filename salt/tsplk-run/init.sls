@@ -2,7 +2,6 @@
 include:
   - salty-splunk
   - tsplk-infra
-  - terraform
 
 {% set user = salt['pillar.get']('tsplk:user', 'tu') %}
 {% set project = salt['pillar.get']('tsplk:project', 'tp') %}
@@ -16,7 +15,7 @@ terraform-init:
     - name: terraform init --backend-config=key={{ user }}-{{ project }} --backend-config=bucket={{ bucket_name }}
     - cwd: /srv/tsplk-infra
     - require:
-      - sls: terraform
+      - sls: tsplk-infra
 
 # apply terraform
 terraform-apply:
@@ -24,7 +23,6 @@ terraform-apply:
     - name: terraform apply -var-file=/srv/pillar/tf_vars.json -target=module.minion
     - cwd: /srv/tsplk-infra
     - require:
-      - sls: terraform
       - cmd: terraform-init
 
 wait_for_start:
