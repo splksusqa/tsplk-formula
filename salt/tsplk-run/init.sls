@@ -68,11 +68,10 @@ hipchat-message:
 
 
 ### run runner grains assign
-#salt.runner:
-#  file.managed:
-#    - name: /srv/pillar
-#    - source:
-#
+create-site:
+  salt.runner:
+    - name: splunk.create_site
+
 ## run runner
 #hipchat:
 #
