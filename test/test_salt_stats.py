@@ -16,13 +16,6 @@ import pytest
 #     Cmd = Docker.get_module("Command")
 #     assert Cmd.exists('terraform')
 #     assert Cmd.run_test('terraform version')
-test_data = {
-    'terraform':
-        {
-            'version': '0.9.5',
-            'hash': 'd127b4f981b1c8cba8ceb90fc6ab0788'
-        }
-}
 
 
 class TestTopFile(object):
