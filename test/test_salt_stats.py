@@ -16,18 +16,25 @@ import pytest
 #     Cmd = Docker.get_module("Command")
 #     assert Cmd.exists('terraform')
 #     assert Cmd.run_test('terraform version')
+test_data = {
+    'terraform':
+        {
+            'version': '0.9.5',
+            'hash': 'd127b4f981b1c8cba8ceb90fc6ab0788'
+        }
+}
 
 
-# class TestTsplkMasterConfig(object):
-    # def test_master_config(self, Docker):
-    #     Docker.provision_state('tsplk-master-config', pillar_data=
-    #         {'tsplk': {'user': 'testuser', 'project': 'testproject'}})
-    #     cmd = Docker.get_module("Command")
-    #     out = cmd.check_output(
-    #                 'cat /etc/salt/master')
-    #     print(out)
-    #     assert 'testuser/testproject/pillar' in out
-    # assert pillar['salty-splunk']['version'] in out
+class TestTopFile(object):
+    def test_master_config(self, Docker):
+        Docker.provision_as('tsplk-packer', pillar_data=
+            {'tsplk': {'user': 'testuser', 'project': 'testproject'}})
+        cmd = Docker.get_module("Command")
+        out = cmd.check_output(
+                    'cat /etc/salt/master')
+        print(out)
+        assert 'testuser/testproject/pillar' in out
+        assert pillar['salty-splunk']['version'] in out
 
 class TestTsplkRun(object):
     @pytest.mark.skip
@@ -59,33 +66,22 @@ class TestTsplkRun(object):
         print(result)
 
 
-    @pytest.mark.skip
     def test_tsplk_terraform(self, Docker):
-        tf_hash = 'd127b4f981b1c8cba8ceb90fc6ab0788'
-        tf_version = '0.9.5'
-        Docker.provision_state('terraform', pillar_data={'terraform': {
-                                                             'version': tf_version,
-                                                             'hash': tf_hash
-                                                         }})
+        tf_version = '0.9.11'
+        data = {'terraform': {'version': tf_version}}
+        Docker.provision_state('terraform', pillar_data=data)
         cmd = Docker.run('terraform version')
         print(cmd.stdout)
         assert tf_version in cmd.stdout
 
 
     def test_tsplk_run(self, Docker):
-        result = Docker.check_output('salt-call --local --retcode-passthrough state.show_sls tsplk-run')
+        result = Docker.check_output('salt --version')
         print(result)
-
-        tf_hash = 'd127b4f981b1c8cba8ceb90fc6ab0788'
-        tf_version = '0.9.5'
-        Docker.provision_state('tsplk-run', pillar_data={'tsplk': {'user': 'u', 'project': 'p',
-                                                                   'id_list': ['1', '2']
-                                                                   },
-                                                         'terraform': {
-                                                             'version': tf_version,
-                                                             'hash': tf_hash
-                                                         }
-                                                         })
+        result = Docker.check_output('salt-call --local pillar.items')
+        print(result)
+        result = Docker.check_output('salt-call --local state.apply tsplk-run')
+        print(result)
 
 
     # @pytest.mark.parametrize(
