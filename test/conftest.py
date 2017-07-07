@@ -79,10 +79,12 @@ def Docker(request, docker_image):
     if os.path.exists(aws_folder):
         aws_str = '-v %s:/root/.aws' % aws_folder
 
+    pillar_data = '-v {0}:/srv/pillar'.format(os.path.join(root_dir, 'test', 'pillar'))
+
     # Run a new container. Run in privileged mode, so systemd will start
     cmd_str = "docker run --privileged -d -l debug " \
-              "-v {rd}/salt:{f} {a} " \
-              "{di}".format(rd=root_dir, di=docker_image, f=formula_folder, a=aws_str)
+              "-v {rd}/salt:{f} {a} {p} " \
+              "{di}".format(rd=root_dir, di=docker_image, f=formula_folder, a=aws_str, p=pillar_data)
     docker_id = check_output(cmd_str)
 
     def teardown():
