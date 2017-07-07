@@ -1,5 +1,4 @@
 {% set tf_version = salt['pillar.get']('terraform:version') %}
-{% set tf_hash = salt['pillar.get']('terraform:hash') %}
 
 # terraform
 install-terraform:
