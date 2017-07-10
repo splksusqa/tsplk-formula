@@ -37,7 +37,6 @@ wait_for_start:
       - {{ id_name }}
 {% endfor %}
     - require:
-      - cmd: terraform-apply
       - cmd: terraform-init
 
 hipchat-message:
