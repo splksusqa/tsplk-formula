@@ -51,26 +51,21 @@ hipchat-message:
       - salt: wait_for_start
 
 
-# wait for all
-#run-manage-up:
-# salt.runner:
-#   - name: manage.up
-#
 ## salt util sync_all
-#sync-all-states-files:
-#  salt.function:
-#    - name: saltutil.sync_all
-#    - tgt: '*'
-#    - require:
-#      - sls: salty-splunk
-#      - sls: tsplk-infra
-#      - cmd.run: terraform-apply
+sync-all-states-files:
+  salt.function:
+    - name: saltutil.sync_all
+    - tgt: '*'
+    - require:
+      - salt: wait_for_start
 
 
 ### run runner grains assign
 create-site:
   salt.runner:
     - name: splunk.create_site
+    - require:
+      - salt: sync-all-states-files
 
 ## run runner
 #hipchat:
