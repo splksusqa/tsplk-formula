@@ -28,13 +28,6 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
-## salt util sync_all
-sync-all-states-files:
-  salt.function:
-    - name: saltutil.sync_all
-    - tgt: '*'
-    - require:
-
 ### run runner grains assign
 create-site:
   salt.runner:
