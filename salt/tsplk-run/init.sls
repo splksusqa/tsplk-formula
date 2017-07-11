@@ -28,28 +28,6 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
-{% set id_list = salt['pillar.get']('tsplk:id_list', []) %}
-wait_for_start:
-  salt.runner:
-    - name: state.event
-    - tagmatch: "salt/minion/*/start"
-    - quiet: True
-    - count: {{ id_list|length }}
-    - timeout: 600
-    - require:
-      - cmd: terraform-init
-
-hipchat-message:
-  hipchat.send_message:
-    - room_id: {{ hipchat_room_id }}
-    - message: 'This state was executed successfully.'
-    - api_url: https://hipchat.splunk.com
-    - api_key: {{ hipchat_room_token }}
-    - api_version: v2
-    - require:
-      - salt: wait_for_start
-
-
 ## salt util sync_all
 sync-all-states-files:
   salt.function:
