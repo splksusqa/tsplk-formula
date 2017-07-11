@@ -1,5 +1,13 @@
 ## salt util sync_all
 sync-all-states-files:
-  salt.function:
-    - name: saltutil.sync_all
+  local.saltutil.sync_all:
     - tgt: {{ data['id'] }}
+
+fire-event:
+  local.event.fire_master:
+    - tgt: {{ data['id'] }}
+    - arg:
+      - '{"data": "states have been synced "}'
+      - states-synced
+    - require:
+      - sync-all-states-files

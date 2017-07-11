@@ -28,12 +28,22 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
+wait-for-sync-state:
+  salt.wait_for_event:
+    - name: states-synced
+    - id_list:
+    {% for id_name in salt['pillar.get']('tsplk:id_list', []) %}
+      - {{ id_name }}
+    {% endfor %}
+    - require:
+      - cmd: terraform-init
+
 ### run runner grains assign
 create-site:
   salt.runner:
     - name: splunk.create_site
     - require:
-      - salt: sync-all-states-files
+      - salt: wait-for-sync-state
 
 ## run runner
 #hipchat:
