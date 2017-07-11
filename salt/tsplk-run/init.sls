@@ -28,14 +28,14 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
+{% set count = len(salt['pillar.get']('tsplk:id_list', [])) %}
 wait_for_start:
-  salt.wait_for_event:
-    - name: salt/minion/*/start
+  salt.runner:
+    - name: state.event
+    - tagmatch: "salt/minion/*/start"
+    - quiet: True
+    - count: {{ count }}
     - timeout: 600
-    - id_list:
-{% for id_name in salt['pillar.get']('tsplk:id_list', []) %}
-      - {{ id_name }}
-{% endfor %}
     - require:
       - cmd: terraform-init
 
