@@ -34,8 +34,6 @@ sync-all-states-files:
     - name: saltutil.sync_all
     - tgt: '*'
     - require:
-      - salt: wait_for_start
-
 
 ### run runner grains assign
 create-site:
