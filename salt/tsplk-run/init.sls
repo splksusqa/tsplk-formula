@@ -31,8 +31,9 @@ terraform-apply:
 wait-for-minions:
   util.wait_for_minions_to_connect:
     - minions:
-      - clin-bb-0
-      - clin-bb-1
+    {% for id_name in salt['pillar.get']('tsplk:id_list', []) %}
+      - {{ id_name }}
+    {% endfor %}
     - timeout: 600
     - require:
       - cmd: terraform-apply
