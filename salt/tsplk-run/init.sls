@@ -28,22 +28,13 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
-wait-for-minions:
-  util.wait_for_minions_to_connect:
-    - minions:
-    {% for id_name in salt['pillar.get']('tsplk:id_list', []) %}
-      - {{ id_name }}
-    {% endfor %}
-    - timeout: 600
-    - require:
-      - cmd: terraform-apply
 
 ### run runner grains assign
 create-site:
   salt.runner:
     - name: splunk.create_site
     - require:
-      - util: wait-for-minions
+      - cmd: terraform-apply
 
 
 ## run runner
