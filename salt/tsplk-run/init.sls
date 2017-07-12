@@ -28,13 +28,21 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
+wait-for-minions:
+  util.wait_for_minions_to_connect:
+    - minions:
+      - clin-bb-0
+      - clin-bb-1
+    - timeout: 600
+    - require:
+      - cmd: terraform-apply
 
 ### run runner grains assign
 create-site:
   salt.runner:
     - name: splunk.create_site
     - require:
-      - cmd: terraform-apply
+      - util: wait-for-minions
 
 
 ## run runner
