@@ -29,7 +29,7 @@ terraform-apply:
       - cmd: terraform-init
 
 # copy license to filebase
-{% set license = salt['pillar.get']('license_path', "") %}
+{% set license = salt['pillar.get']('license_name', "") %}
 {% if license != "" %}
 copy-license:
   file.copy:
