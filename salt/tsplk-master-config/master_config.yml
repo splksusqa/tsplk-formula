@@ -5,6 +5,7 @@ file_roots:
     - /srv/salty-splunk/file_base
     - /srv/salty-splunk/formulas/nfs
     - /srv/tsplk-formula/reactor
+    - /srv/files
 
 pillar_roots:
   base:

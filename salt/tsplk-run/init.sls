@@ -28,6 +28,16 @@ terraform-apply:
     - require:
       - cmd: terraform-init
 
+# copy license to filebase
+{% set license = salt['pillar.get']('license_path', "") %}
+{% if license != "" %}
+copy-license:
+  file.copy:
+    - name: /srv/files/{license}
+    - source: /srv/pillar/{license}
+    - force: True
+
+{% endif %}
 
 ### run runner grains assign
 create-site:
