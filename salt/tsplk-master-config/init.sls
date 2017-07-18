@@ -11,6 +11,10 @@ salt-master-conf:
         project: {{ salt['pillar.get']('tsplk:project', 'tp') }}
         bucket_name: {{ salt['pillar.get']('tsplk:bucket-name', 'tp') }}
 
+create-files-directory:
+  cmd.run:
+    - name: mkdir /srv/files
+
 # create minion configuration that able to run salt function on master machine
 salt-masterless-conf:
   file.managed:
