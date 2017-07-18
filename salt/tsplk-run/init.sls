@@ -34,7 +34,7 @@ terraform-apply:
 copy-license:
   file.copy:
     - name: /srv/files/{{ license }}
-    - source: /srv/pillar/{{ license} }
+    - source: /srv/pillar/{{ license }}
     - force: True
 
 {% endif %}
