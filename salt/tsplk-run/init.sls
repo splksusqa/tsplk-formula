@@ -47,10 +47,18 @@ create-site:
       - cmd: terraform-apply
 
 
-## run runner
-#hipchat:
-#
-#
+# send hipchat message to users
+hipchat-message:
+  hipchat.send_message:
+    - room_id: {{ hipchat_room_id }}
+    - message: 'This state was executed successfully.'
+    - api_url: https://hipchat.splunk.com
+    - api_key: {{ hipchat_room_token }}
+    - api_version: v2
+    - color: random
+    - require:
+      - salt: create-site
+
 #run-manage-up:
 # salt.runner:
 #   - name: manage.up
