@@ -46,16 +46,14 @@ create-site:
     - require:
       - cmd: terraform-apply
 
-
 # send hipchat message to users
+{% set mention_name = salt['pillar.get']('tsplk:mention_name', '') %}
 hipchat-message:
-  hipchat.send_message:
-    - room_id: {{ hipchat_room_id }}
-    - message: 'This state was executed successfully.'
-    - api_url: https://hipchat.splunk.com
-    - api_key: {{ hipchat_room_token }}
-    - api_version: v2
-    - color: random
+  http.query:
+    - name: {{ hipchat_server }}/room/{{ hipchat_room_id }}/notification?auth_token={{ hipchat_room_token }}
+    - data: "message=@{{ mention_name }} The project {{ project }} was deployed successfully.&color=random&message_format=text"
+    - status: 204
+    - method: POST
     - require:
       - salt: create-site
 
