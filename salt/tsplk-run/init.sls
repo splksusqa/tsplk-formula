@@ -48,7 +48,7 @@ create-site:
 
 # send hipchat message to users
 {% set mention_name = salt['pillar.get']('tsplk:mention_name', '') %}
-{% set hipchat_server = "https://hipchat.splunk.com/v2"}
+{% set hipchat_server = "https://hipchat.splunk.com/v2" %}
 
 hipchat-message:
   http.query:
