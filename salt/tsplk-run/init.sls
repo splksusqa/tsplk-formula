@@ -39,12 +39,15 @@ copy-license:
 
 {% endif %}
 
+{% set version = salt['pillar.get']('version', "") %}
+{% if version != "" %}
 ### run runner grains assign
 create-site:
   salt.runner:
     - name: splunk.create_site
     - require:
       - cmd: terraform-apply
+{% endif %}
 
 # send hipchat message to users
 {% set mention_name = salt['pillar.get']('tsplk:mention_name', '') %}
