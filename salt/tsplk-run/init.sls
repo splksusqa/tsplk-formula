@@ -52,6 +52,11 @@ create-site:
 # send hipchat message to users
 {% set mention_name = salt['pillar.get']('tsplk:mention_name', '') %}
 {% set hipchat_server = "https://hipchat.splunk.com/v2" %}
+{% if version != "" %}
+  {% set require = "salt: create-site" %}
+{% else %}
+  {% set require = "cmd: terraform-apply" %}
+{% endif %}
 
 hipchat-message:
   http.query:
@@ -60,7 +65,7 @@ hipchat-message:
     - status: 204
     - method: POST
     - require:
-      - salt: create-site
+      - {{ require }}
 
 #run-manage-up:
 # salt.runner:
