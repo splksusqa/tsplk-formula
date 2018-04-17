@@ -67,7 +67,7 @@ hipchat-message:
     - require:
       - {{ require }}
 
-{% set slack_web_hook = salt['pillar.get']('slack_web_hook') %}
+{% set slack_web_hook = salt['pillar.get']('slack_web_hook', '') %}
 {% set id = salt['pillar.get']('tsplk:user') %}
 slack-message:
     cmd.run:
