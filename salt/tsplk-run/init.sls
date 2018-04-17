@@ -68,7 +68,7 @@ hipchat-message:
       - {{ require }}
 
 {% set slack_web_hook = salt['pillar.get']('slack_web_hook') %}
-{% set id = salt['pillar.get']('tsplk:user')}
+{% set id = salt['pillar.get']('tsplk:user') %}
 slack-message:
     http.query:
     - name: {{ slack_web_hook }}
