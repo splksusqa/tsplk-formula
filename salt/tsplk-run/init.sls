@@ -67,6 +67,15 @@ hipchat-message:
     - require:
       - {{ require }}
 
+{% set slack_web_hook = salt['pillar.get']('slack_web_hook', '') %}
+{% if slack_web_hook != "" %}
+slack-message:
+    cmd.run:
+    - name: "curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"<@{{ user }}> Your project {{ project }} was deployed successfully\"}' {{ slack_web_hook }}"
+    - require:
+      - {{ require }}
+{% endif %}
+
 #run-manage-up:
 # salt.runner:
 #   - name: manage.up
