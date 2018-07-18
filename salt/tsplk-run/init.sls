@@ -49,23 +49,11 @@ create-site:
       - cmd: terraform-apply
 {% endif %}
 
-# send hipchat message to users
-{% set mention_name = salt['pillar.get']('tsplk:mention_name', '') %}
-{% set hipchat_server = "https://hipchat.splunk.com/v2" %}
 {% if version != "" %}
   {% set require = "salt: create-site" %}
 {% else %}
   {% set require = "cmd: terraform-apply" %}
 {% endif %}
-
-hipchat-message:
-  http.query:
-    - name: {{ hipchat_server }}/room/{{ hipchat_room_id }}/notification?auth_token={{ hipchat_room_token }}
-    - data: "message=@{{ mention_name }} The project {{ project }} was deployed successfully.&color=random&message_format=text"
-    - status: 204
-    - method: POST
-    - require:
-      - {{ require }}
 
 {% set slack_web_hook = salt['pillar.get']('slack_web_hook', '') %}
 {% if slack_web_hook != "" %}
